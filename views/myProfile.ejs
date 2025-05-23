@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Profile</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px 20px;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      position: relative;
+    }
+
+    .logout-btn,
+    .delete-btn {
+      top: 20px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      border: none;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    .logout-btn {
+      background-color: rgb(35, 174, 46);
+    }
+
+    .logout-btn:hover {
+      background-color: #cb6212;
+    }
+
+    .delete-btn {
+      
+      background-color: #10af45;
+      float: right;
+    }
+
+    .delete-btn:hover {
+      background-color: #e65100;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    strong {
+      color: #222;
+    }
+
+    a {
+      display: inline-block;
+      margin: 10px 0;
+      color: #4caf50;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+
+    a:hover {
+      color: #388e3c;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Buttons -->
+    <button class="logout-btn" id="logoutButton">Logout</button>
+    <button class="delete-btn" id="deleteButton">Delete Account</button>
+
+    <h1>My Profile</h1>
+    <p><strong>Name:</strong> <%= profile.Name %></p>
+    <p><strong>Email:</strong> <%= profile.Email %></p>
+
+    <a href="/Myreview">→ View My Reviews</a><br>
+    <a href="/Addreview">→ Add Review</a><br>
+    <a href="/Allprofiles">→ View All Profiles</a><br>
+  </div>
+
+  <script>
+    // Logout Button
+   document.getElementById('logoutButton').addEventListener('click', function() {
+    // Confirm logout
+    const confirmation = confirm('Are you sure you want to logout?');
+    if (confirmation) {
+        // Send DELETE request to the server for logout
+        fetch('/logout', {
+            method: 'DELETE',  // Explicitly setting the method as DELETE
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Logged out successfully!') {
+                alert('Logged out!');
+                window.location.href = '/login'; // Redirect to login page after logout
+            } else {
+                alert('Error during logout');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Something went wrong');
+        });
+    }
+});
+
+    // Delete Button
+    document.getElementById('deleteButton').addEventListener('click', function () {
+      if (confirm('Are you sure you want to delete your account?')) {
+        const userEmail = '<%= profile.Email %>';
+
+        fetch(`/delete/${userEmail}`, {
+          method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === 'Deleted successfully!') {
+            alert('Account deleted!');
+            window.location.href = '/login';
+          } else {
+            alert('Error deleting account: ' + data.message);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Something went wrong');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
