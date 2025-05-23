@@ -43,7 +43,7 @@ m.connect(process.env.M)
 .catch((err)=>{
     console.log('Not connected')
 })
-app.get('/get',(req,res)=>{
+app.get('/',(req,res)=>{
   res.render('login');
 })
 app.get('/register', (req, res) => {
