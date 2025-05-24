@@ -170,7 +170,7 @@ app.delete('/logout', (req, res) => {
   app.get('/Allprofiles', mw, async (req, res) => {
     try {
       const profiles = await u.find(); // fetch all user profiles
-      res.render('allProfiles', { profiles });
+      res.render('allprofiles', { profiles });
     } catch (err) {
       console.log(err);
       res.status(500).send('Server error');
